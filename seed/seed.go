@@ -31,11 +31,13 @@ func main() {
 		log.Fatalf("Error migrating database schema: %v", err)
 	}
 
-	dataLength := 1000000
+	dataLength := 10000000
 	batchLength := 5000
 
-	// Insert large data with a batch size of 1000
-	err = insertLargeDataWithTransactionGORM(database, dataLength, batchLength)
+	// dataLength := 100
+	// batchLength := 100
+
+	err = insertDataWithTransaction(database, dataLength, batchLength)
 	if err != nil {
 		log.Fatalf("Error inserting data: %v", err)
 	}
@@ -43,7 +45,7 @@ func main() {
 	log.Println("Data seeding completed successfully.")
 }
 
-func insertLargeDataWithTransactionGORM(database *gorm.DB, dataLength, batchLength int) error {
+func insertDataWithTransaction(database *gorm.DB, dataLength, batchLength int) error {
 	tx := database.Begin()
 
 	defer func() {

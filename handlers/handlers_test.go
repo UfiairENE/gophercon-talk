@@ -36,7 +36,7 @@ func setupTestDB() (*gorm.DB, func()) {
 	}
 
 	return db, func() {
-		db.Exec("DELETE FROM data") // Cleanup after tests
+		// db.Exec("DELETE FROM data") // Cleanup after tests
 	}
 }
 
@@ -85,7 +85,6 @@ func TestReadDataHandler(t *testing.T) {
 	db, teardown := setupTestDB()
 	defer teardown()
 
-	// Insert a record to read
 	col2 := 200000
 	db.Exec("delete from data where column2=?", col2)
 	data := dbp.Data{Column1: "Test", Column2: col2}
@@ -107,7 +106,7 @@ func TestReadDataHandler(t *testing.T) {
 	})
 
 	t.Run("Data not found", func(t *testing.T) {
-		req := httptest.NewRequest(http.MethodGet, "/read?column2=999", nil)
+		req := httptest.NewRequest(http.MethodGet, "/read?column2=99999999999999", nil)
 		rec := httptest.NewRecorder()
 
 		handler(rec, req)
